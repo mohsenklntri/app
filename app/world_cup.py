@@ -37,75 +37,78 @@ Portugal wins:1 , loses:1 , draws:1 , goal difference:0 , points:4
 Morocco wins:1 , loses:2 , draws:0 , goal difference:-2 , points:3
 """
 
-if __name__ == "__main__":
-    score_table = {
-        "Spain": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-        "Iran": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-        "Portugal": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-        "Morocco": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-    }
+score_table = {
+    "Spain": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
+    "Iran": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
+    "Portugal": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
+    "Morocco": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
+}
 
-    def update_points(match_title, match_score):
-        # update points for team1 and team2 of input
-        # goal1, goal2 = list(map(int, result.split('-')))
-        team1, team2 = match_title
-        goal1, goal2 = match_score
-        if goal1 == goal2:
-            score_table[team1]["points"] += 1
-            score_table[team2]["points"] += 1
-        elif goal1 > goal2:
-            score_table[team1]["points"] += 3
-        else:
-            score_table[team2]["points"] += 3
 
-    def update_wlds(match_title, match_score):
-        # update wins, losses and draws for team1 and team2 of input
-        # goal1, goal2 = list(map(int, result.split('-')))
-        team1, team2 = match_title
-        goal1, goal2 = match_score
-        if goal1 == goal2:
-            score_table[team1]["draws"] += 1
-            score_table[team2]["draws"] += 1
-        elif goal1 > goal2:
-            score_table[team1]["wins"] += 1
-            score_table[team2]["loses"] += 1
-        else:
-            score_table[team1]["loses"] += 1
-            score_table[team2]["wins"] += 1
+def update_points(match_title, match_score):
+    # update points for team1 and team2 of input
+    # goal1, goal2 = list(map(int, result.split('-')))
+    team1, team2 = match_title
+    goal1, goal2 = match_score
+    if goal1 == goal2:
+        score_table[team1]["points"] += 1
+        score_table[team2]["points"] += 1
+    elif goal1 > goal2:
+        score_table[team1]["points"] += 3
+    else:
+        score_table[team2]["points"] += 3
 
-    def update_goal_diff(match_title, match_score):
-        # update goal difference for team1 and team2 of input
-        # goal1, goal2 = list(map(int, result.split('-')))
-        team1, team2 = match_title
-        goal1, goal2 = match_score
-        score_table[team1]["goal difference"] += goal1 - goal2
-        score_table[team2]["goal difference"] += goal2 - goal1
 
-    match_titles = []
-    match_scores = []
+def update_wlds(match_title, match_score):
+    # update wins, losses and draws for team1 and team2 of input
+    # goal1, goal2 = list(map(int, result.split('-')))
+    team1, team2 = match_title
+    goal1, goal2 = match_score
+    if goal1 == goal2:
+        score_table[team1]["draws"] += 1
+        score_table[team2]["draws"] += 1
+    elif goal1 > goal2:
+        score_table[team1]["wins"] += 1
+        score_table[team2]["loses"] += 1
+    else:
+        score_table[team1]["loses"] += 1
+        score_table[team2]["wins"] += 1
 
-    for _ in range(6):
-        # (team1, team2) = input().split(' - ')
-        match_titles.append(input().split(" - "))
 
-    for _ in range(6):
-        # (goal1, goal2) = list(map(int, input().split('-')))
-        match_scores.append(list(map(int, input().split("-"))))
+def update_goal_diff(match_title, match_score):
+    # update goal difference for team1 and team2 of input
+    # goal1, goal2 = list(map(int, result.split('-')))
+    team1, team2 = match_title
+    goal1, goal2 = match_score
+    score_table[team1]["goal difference"] += goal1 - goal2
+    score_table[team2]["goal difference"] += goal2 - goal1
 
-    for i in range(6):
-        match_title = match_titles[i]
-        match_score = match_scores[i]
 
-        update_points(match_title, match_score)
-        update_wlds(match_title, match_score)
-        update_goal_diff(match_title, match_score)
+match_titles = []
+match_scores = []
 
-    # for k, v in score_table.items():
-    #     print(k, v)
+for _ in range(6):
+    # (team1, team2) = input().split(' - ')
+    match_titles.append(input().split(" - "))
 
-    # Create a list of teams sorted by points, wins, and then by team name alphabetically
-    sorted_score_table = sorted(score_table.items(), key=lambda x: (x[1]["points"], x[1]["wins"], x[0]))
+for _ in range(6):
+    # (goal1, goal2) = list(map(int, input().split('-')))
+    match_scores.append(list(map(int, input().split("-"))))
 
-    custom_format = "wins:{wins} , loses:{loses} , draws:{draws} , goal difference:{goal difference} , points:{points}"
-    for row in sorted_score_table:
-        print(row[0], custom_format.format(**row[1]))
+for i in range(6):
+    match_title = match_titles[i]
+    match_score = match_scores[i]
+
+    update_points(match_title, match_score)
+    update_wlds(match_title, match_score)
+    update_goal_diff(match_title, match_score)
+
+# for k, v in score_table.items():
+#     print(k, v)
+
+# Create a list of teams sorted by points, wins, and then by team name alphabetically
+sorted_score_table = sorted(score_table.items(), key=lambda x: (x[1]["points"], x[1]["wins"], x[0]))
+
+custom_format = "wins:{wins} , loses:{loses} , draws:{draws} , goal difference:{goal difference} , points:{points}"
+for row in sorted_score_table:
+    print(row[0], custom_format.format(**row[1]))
