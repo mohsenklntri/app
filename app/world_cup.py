@@ -46,7 +46,7 @@ score_table = {
 
 
 def update_points(match_title, match_score):
-    # update points for team1 and team2 of input
+    """Update points for team1 and team2 of input."""
     # goal1, goal2 = list(map(int, result.split('-')))
     team1, team2 = match_title
     goal1, goal2 = match_score
@@ -60,7 +60,7 @@ def update_points(match_title, match_score):
 
 
 def update_wlds(match_title, match_score):
-    # update wins, losses and draws for team1 and team2 of input
+    """Update wins, losses and draws for team1 and team2 of input."""
     # goal1, goal2 = list(map(int, result.split('-')))
     team1, team2 = match_title
     goal1, goal2 = match_score
@@ -76,7 +76,7 @@ def update_wlds(match_title, match_score):
 
 
 def update_goal_diff(match_title, match_score):
-    # update goal difference for team1 and team2 of input
+    """Update goal difference for team1 and team2 of input."""
     # goal1, goal2 = list(map(int, result.split('-')))
     team1, team2 = match_title
     goal1, goal2 = match_score
