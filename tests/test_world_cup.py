@@ -1,26 +1,29 @@
-from app.world_cup import update_points, update_wlds, update_goal_diff
+from app.world_cup_OOP import ScoreTable
 
 
 def test_update_statistics():
-    score_table = {
-        "Spain": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-        "Iran": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-    }
+    score_table = ScoreTable()
 
-    match_title = ("Spain", "Iran")
-    match_score = (2, 1)
+    teams_list = ["Spain", "Iran", "Portugal"]
+    for team in teams_list:
+        score_table.add_team(team)
 
-    update_points(match_title, match_score)
-    update_wlds(match_title, match_score)
-    update_goal_diff(match_title, match_score)
+    score_table.update_scores(("Spain", "Iran"), (2, 0))
+    score_table.update_scores(("Portugal", "Iran"), (2, 2))
+    score_table.update_scores(("Spain", "Portugal"), (3, 2))
 
-    assert score_table["Spain"]["points"] == 3
-    assert score_table["Iran"]["points"] == 0
-    assert score_table["Spain"]["wins"] == 1
-    assert score_table["Spain"]["loses"] == 0
-    assert score_table["Spain"]["draws"] == 0
-    assert score_table["Iran"]["wins"] == 0
-    assert score_table["Iran"]["loses"] == 1
-    assert score_table["Iran"]["draws"] == 0
-    assert score_table["Spain"]["goal difference"] == 1
-    assert score_table["Iran"]["goal difference"] == -1
+    assert score_table.teams["Spain"].points == 6
+    assert score_table.teams["Iran"].points == 1
+    assert score_table.teams["Portugal"].points == 1
+    assert score_table.teams["Spain"].wins == 2
+    assert score_table.teams["Spain"].loses == 0
+    assert score_table.teams["Spain"].draws == 0
+    assert score_table.teams["Iran"].wins == 0
+    assert score_table.teams["Iran"].loses == 1
+    assert score_table.teams["Iran"].draws == 1
+    assert score_table.teams["Portugal"].wins == 0
+    assert score_table.teams["Portugal"].loses == 1
+    assert score_table.teams["Portugal"].draws == 1
+    assert score_table.teams["Spain"].goal_difference == 3
+    assert score_table.teams["Iran"].goal_difference == -2
+    assert score_table.teams["Portugal"].goal_difference == -1

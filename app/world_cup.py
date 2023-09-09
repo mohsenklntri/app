@@ -47,7 +47,6 @@ score_table = {
 
 def update_points(match_title, match_score):
     """Update points for team1 and team2 of input."""
-    # goal1, goal2 = list(map(int, result.split('-')))
     team1, team2 = match_title
     goal1, goal2 = match_score
     if goal1 == goal2:
@@ -61,7 +60,6 @@ def update_points(match_title, match_score):
 
 def update_wlds(match_title, match_score):
     """Update wins, losses and draws for team1 and team2 of input."""
-    # goal1, goal2 = list(map(int, result.split('-')))
     team1, team2 = match_title
     goal1, goal2 = match_score
     if goal1 == goal2:
@@ -77,7 +75,6 @@ def update_wlds(match_title, match_score):
 
 def update_goal_diff(match_title, match_score):
     """Update goal difference for team1 and team2 of input."""
-    # goal1, goal2 = list(map(int, result.split('-')))
     team1, team2 = match_title
     goal1, goal2 = match_score
     score_table[team1]["goal difference"] += goal1 - goal2
@@ -88,11 +85,9 @@ match_titles = []
 match_scores = []
 
 for _ in range(6):
-    # (team1, team2) = input().split(' - ')
     match_titles.append(input().split(" - "))
 
 for _ in range(6):
-    # (goal1, goal2) = list(map(int, input().split('-')))
     match_scores.append(list(map(int, input().split("-"))))
 
 for i in range(6):
@@ -103,11 +98,8 @@ for i in range(6):
     update_wlds(match_title, match_score)
     update_goal_diff(match_title, match_score)
 
-# for k, v in score_table.items():
-#     print(k, v)
 
-# Create a list of teams sorted by points, wins, and then by team name alphabetically
-sorted_score_table = sorted(score_table.items(), key=lambda x: (x[1]["points"], x[1]["wins"], x[0]))
+sorted_score_table = sorted(score_table.items(), key=lambda x: (-x[1]["points"], -x[1]["wins"], x[0]))
 
 custom_format = "wins:{wins} , loses:{loses} , draws:{draws} , goal difference:{goal difference} , points:{points}"
 for row in sorted_score_table:
