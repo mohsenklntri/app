@@ -3,7 +3,7 @@ test:
 
 dev:
 	pre-commit run -a
-	mypy ../app --check-untyped-defs
-	pytype ../app
-	radon cc -a -nb ../app
+	mypy ../code_quality --check-untyped-defs
+	pytype ../code_quality
+	radon cc -a -nb ../code_quality
 	pytest -svv --log-cli-level=INFO --cov=app/ tests/ --hypothesis-show-statistics

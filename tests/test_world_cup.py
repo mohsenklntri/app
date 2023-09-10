@@ -1,4 +1,4 @@
-from app.world_cup_OOP import ScoreTable
+from app.world_cup import ScoreTable
 
 
 def test_update_statistics():

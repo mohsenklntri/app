@@ -1,106 +1,100 @@
-"""Word Cup.
-
-Iran, Portugal, Spain and Morocco are present in Group B of the World Cup.
-Write a program that, upon receiving the results of the games,
-will print the team name, the number of wins and losses,
-and the difference in goals and points respectively in one line.
-Each team should be printed in order of points in one line.
-(If the points are equal, the number of wins will be considered.
-If both the number of wins and the points are equal,
-they will be printed in alphabetical order.)
-
-Note: The team gets zero points in case of loss,
-one point in case of draw and three points in case of win.
-Goal difference is the difference between goals scored and goals conceded by a team.
-
-Read the results of the games in the following order:
-(in the sample entry, the left number corresponds to the right team.)
-
-Input:
-Iran - Spain
-Iran - Portugal
-Iran - Morocco
-Spain - Portugal
-Spain - Morocco
-Portugal - Morocco
-2-2
-2-1
-1-2
-2-2
-3-1
-2-1
-
-Output:
-Spain wins:1 , loses:0 , draws:2 , goal difference:2 , points:5
-Iran wins:1 , loses:1 , draws:1 , goal difference:0 , points:4
-Portugal wins:1 , loses:1 , draws:1 , goal difference:0 , points:4
-Morocco wins:1 , loses:2 , draws:0 , goal difference:-2 , points:3
-"""
-
-score_table = {
-    "Spain": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-    "Iran": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-    "Portugal": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-    "Morocco": {"wins": 0, "loses": 0, "draws": 0, "goal difference": 0, "points": 0},
-}
+"""World Cup: This module contains classes for managing World Cup statistics."""
 
 
-def update_points(match_title, match_score):
-    """Update points for team1 and team2 of input."""
-    team1, team2 = match_title
-    goal1, goal2 = match_score
-    if goal1 == goal2:
-        score_table[team1]["points"] += 1
-        score_table[team2]["points"] += 1
-    elif goal1 > goal2:
-        score_table[team1]["points"] += 3
-    else:
-        score_table[team2]["points"] += 3
+class Team:
+    """Represents a team with attributes wins, losses, draws, goal difference, and points."""
+
+    def __init__(self):
+        """Initialize a Team object with default (default=0) values."""
+        self.wins = 0
+        self.loses = 0
+        self.draws = 0
+        self.goal_difference = 0
+        self.points = 0
+
+    def update_stats(self, match_result):
+        """
+        Update the team's statistics based on a match result.
+
+        Args:
+            match_result (tuple or list): A tuple containing the goals scored by both teams in a match.
+        """
+        goal1, goal2 = match_result
+
+        if goal1 == goal2:
+            self.draws += 1
+            self.points += 1
+        elif goal1 > goal2:
+            self.wins += 1
+            self.points += 3
+        else:
+            self.loses += 1
+
+        self.goal_difference += goal1 - goal2
 
 
-def update_wlds(match_title, match_score):
-    """Update wins, losses and draws for team1 and team2 of input."""
-    team1, team2 = match_title
-    goal1, goal2 = match_score
-    if goal1 == goal2:
-        score_table[team1]["draws"] += 1
-        score_table[team2]["draws"] += 1
-    elif goal1 > goal2:
-        score_table[team1]["wins"] += 1
-        score_table[team2]["loses"] += 1
-    else:
-        score_table[team1]["loses"] += 1
-        score_table[team2]["wins"] += 1
+class ScoreTable:
+    """Represent a score table that keeps track of multiple teams' scores and rankings."""
+
+    def __init__(self):
+        """Initialize a ScoreTable object with an empty dictionary to store teams."""
+        self.teams = {}
+
+    def add_team(self, team_name):
+        """
+        Add a new team to the score table.
+
+        Args:
+            team_name (str): The name of the team to be added.
+        """
+        self.teams[team_name] = Team()
+
+    def update_scores(self, match_title, match_score):
+        """
+        Update the scores and statistics of two teams based on a match result.
+
+        Args:
+            match_title (tuple or list): A tuple containing the names of the two teams involved in the match.
+            match_score (tuple or list): A tuple containing the goals scored by both teams in the match.
+        """
+        team1, team2 = match_title
+        team1_obj = self.teams[team1]
+        team2_obj = self.teams[team2]
+        team1_obj.update_stats(match_score)
+        team2_obj.update_stats(match_score[::-1])
+
+    def print_sorted_table(self):
+        """Print a sorted table of teams and their statistics."""
+        sorted_table = sorted(self.teams.items(), key=lambda x: (-x[1].points, -x[1].wins, x[0]))
+        custom_format = "wins:{} , loses:{} , draws:{} , goal difference:{} , points:{}"
+        for team_name, team_obj in sorted_table:
+            stats = custom_format.format(
+                team_obj.wins, team_obj.loses, team_obj.draws, team_obj.goal_difference, team_obj.points
+            )
+            print(f"{team_name} {stats}")
 
 
-def update_goal_diff(match_title, match_score):
-    """Update goal difference for team1 and team2 of input."""
-    team1, team2 = match_title
-    goal1, goal2 = match_score
-    score_table[team1]["goal difference"] += goal1 - goal2
-    score_table[team2]["goal difference"] += goal2 - goal1
+if __name__ == "__main__":
+    score_table = ScoreTable()
 
+    teams_list = input("Enter team names separated by spaces:\n").split()
+    for team in teams_list:
+        score_table.add_team(team)
 
-match_titles = []
-match_scores = []
+    number_of_total_games = 0.5 * len(teams_list) * (len(teams_list) - 1)
 
-for _ in range(6):
-    match_titles.append(input().split(" - "))
+    match_input = input("Enter match results (e.g., 'Iran-Spain 2-1') or press Enter to finish:\n").split()
+    input_match_number = 1
 
-for _ in range(6):
-    match_scores.append(list(map(int, input().split("-"))))
+    while True:
+        if not match_input:
+            break
+        team_1, team_2 = match_input[0].split("-")
+        current_match_result = list(map(int, match_input[1].split("-")))
+        score_table.update_scores((team_1, team_2), current_match_result)
+        if input_match_number == number_of_total_games:
+            break
+        match_input = input().split()
+        input_match_number += 1
 
-for i in range(6):
-    match_title = match_titles[i]
-    match_score = match_scores[i]
-
-    update_points(match_title, match_score)
-    update_wlds(match_title, match_score)
-    update_goal_diff(match_title, match_score)
-
-
-sorted_score_table = sorted(score_table.items(), key=lambda x: (-x[1]["points"], -x[1]["wins"], x[0]))
-
-custom_format = "wins:{wins} , loses:{loses} , draws:{draws} , goal difference:{goal difference} , points:{points}"
-for row in sorted_score_table:
-    print(row[0], custom_format.format(**row[1]))
+    score_table.print_sorted_table()
